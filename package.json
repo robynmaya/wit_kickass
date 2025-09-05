@@ -1,0 +1,31 @@
+{
+  "name": "wit-kickass-fullstack-practice",
+  "version": "1.0.0",
+  "description": "Full-stack practice workspace with React + Express, React + FastAPI, and React + Rails",
+  "scripts": {
+    "setup": "./setup.sh",
+    "health": "./health-check.sh",
+    "db:start": "docker-compose up -d postgres",
+    "db:stop": "docker-compose down",
+    "db:reset": "docker-compose down -v && docker-compose up -d postgres && sleep 5",
+    "react-express": "npm run db:start && cd react-express-app && ./start.sh",
+    "react-python": "npm run db:start && cd react-python-app && ./start.sh",
+    "react-rails": "npm run db:start && cd react-rails-app && ./start.sh",
+    "dev:all": "./dev-start.sh"
+  },
+  "keywords": [
+    "react",
+    "express",
+    "fastapi",
+    "rails",
+    "typescript",
+    "fullstack",
+    "practice"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "."
+  }
+}

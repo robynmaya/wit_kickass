@@ -1,0 +1,113 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start Express Backend",
+            "type": "shell",
+            "command": "npm",
+            "args": ["run", "dev"],
+            "options": {
+                "cwd": "${workspaceFolder}/react-express-app/backend"
+            },
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": "^.*Server running.*$",
+                        "endsPattern": "^.*Server running.*$"
+                    }
+                }
+            ]
+        },
+        {
+            "label": "Start Express Frontend",
+            "type": "shell",
+            "command": "npm",
+            "args": ["run", "dev"],
+            "options": {
+                "cwd": "${workspaceFolder}/react-express-app/frontend"
+            },
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "Start Python Backend",
+            "type": "shell",
+            "command": "python",
+            "args": ["app.py"],
+            "options": {
+                "cwd": "${workspaceFolder}/react-python-app/backend"
+            },
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "Start Python Frontend",
+            "type": "shell",
+            "command": "npm",
+            "args": ["run", "dev"],
+            "options": {
+                "cwd": "${workspaceFolder}/react-python-app/frontend"
+            },
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "Start Rails Frontend",
+            "type": "shell",
+            "command": "npm",
+            "args": ["run", "dev"],
+            "options": {
+                "cwd": "${workspaceFolder}/react-rails-app/frontend"
+            },
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "Start Rails Backend",
+            "type": "shell",
+            "command": "rails",
+            "args": ["server"],
+            "options": {
+                "cwd": "${workspaceFolder}/react-rails-app/backend"
+            },
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "Install Express Dependencies",
+            "type": "shell",
+            "command": "npm",
+            "args": ["install"],
+            "options": {
+                "cwd": "${workspaceFolder}/react-express-app/backend"
+            },
+            "group": "build"
+        },
+        {
+            "label": "Install Python Dependencies",
+            "type": "shell",
+            "command": "pip",
+            "args": ["install", "-r", "requirements.txt"],
+            "options": {
+                "cwd": "${workspaceFolder}/react-python-app/backend"
+            },
+            "group": "build"
+        }
+    ]
+}

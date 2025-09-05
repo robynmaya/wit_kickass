@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Express Backend",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/react-express-app/backend/src/index.ts",
+            "outFiles": ["${workspaceFolder}/react-express-app/backend/dist/**/*.js"],
+            "runtimeArgs": ["-r", "ts-node/register"],
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "console": "integratedTerminal",
+            "skipFiles": ["<node_internals>/**"]
+        },
+        {
+            "name": "Debug Python Backend",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/react-python-app/backend/app.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/react-python-app/backend",
+            "env": {
+                "FLASK_ENV": "development",
+                "FLASK_DEBUG": "1"
+            }
+        }
+    ]
+}

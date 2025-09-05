@@ -1,0 +1,30 @@
+{
+    "python.defaultInterpreterPath": "./react-python-app/backend/venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "typescript.preferences.includePackageJsonAutoImports": "auto",
+    "emmet.includeLanguages": {
+        "javascript": "javascriptreact",
+        "typescript": "typescriptreact"
+    },
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/venv": true,
+        "**/__pycache__": true,
+        "**/*.pyc": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/venv": true,
+        "**/*.log": true
+    },
+    "workbench.tree.indent": 20,
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml",
+        "tsconfig.json": "tsconfig.*.json",
+        "vite.config.ts": "vite.config.*.ts",
+        "requirements.txt": "requirements-*.txt, Pipfile, Pipfile.lock"
+    }
+}

@@ -1,0 +1,83 @@
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY) /*application='Backend'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2025-09-05 16:25:01.581056', '2025-09-05 16:25:01.581058') RETURNING "key" /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Backend'*/[0m
+Migrating to CreateProjects (20250905162455)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Backend'*/[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE "projects" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar, "description" text, "completed" boolean, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20250905162455') RETURNING "version" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Backend'*/[0m
+  [1m[36mProject Load (0.2ms)[0m  [1m[34mSELECT "projects".* FROM "projects" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Create (1.1ms)[0m  [1m[32mINSERT INTO "projects" ("title", "description", "completed", "created_at", "updated_at") VALUES ('Learn Ruby on Rails', 'Master the Rails framework and conventions', 0, '2025-09-05 16:30:09.437598', '2025-09-05 16:30:09.437598') RETURNING "id" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Create (0.5ms)[0m  [1m[32mINSERT INTO "projects" ("title", "description", "completed", "created_at", "updated_at") VALUES ('Build REST API', 'Create a JSON API with CRUD operations', 1, '2025-09-05 16:30:09.440091', '2025-09-05 16:30:09.440091') RETURNING "id" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Create (0.5ms)[0m  [1m[32mINSERT INTO "projects" ("title", "description", "completed", "created_at", "updated_at") VALUES ('Connect with React Frontend', 'Integrate Rails API with React application', 0, '2025-09-05 16:30:09.441478', '2025-09-05 16:30:09.441478') RETURNING "id" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Create (0.5ms)[0m  [1m[32mINSERT INTO "projects" ("title", "description", "completed", "created_at", "updated_at") VALUES ('Deploy to Production', 'Deploy the full-stack application to a cloud platform', 0, '2025-09-05 16:30:09.442767', '2025-09-05 16:30:09.442767') RETURNING "id" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "projects" /*application='Backend'*/[0m
+Started GET "/api/health" for ::1 at 2025-09-05 12:34:55 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Backend'*/[0m
+Processing by Api::ApplicationController#health as */*
+Completed 200 OK in 10ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 3.5ms)
+
+
+Started GET "/api/projects" for ::1 at 2025-09-05 12:35:00 -0400
+Processing by Api::ProjectsController#index as */*
+  [1m[36mProject Load (0.6ms)[0m  [1m[34mSELECT "projects".* FROM "projects" /*action='index',application='Backend',controller='projects'*/[0m
+  ↳ app/controllers/api/projects_controller.rb:7:in `index'
+Completed 200 OK in 29ms (Views: 8.9ms | ActiveRecord: 1.1ms (1 query, 0 cached) | GC: 13.7ms)
+
+
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Backend'*/[0m
+  [1m[36mProject Load (0.4ms)[0m  [1m[34mSELECT "projects".* FROM "projects" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Destroy (0.8ms)[0m  [1m[31mDELETE FROM "projects" WHERE "projects"."id" = 1 /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Destroy (0.5ms)[0m  [1m[31mDELETE FROM "projects" WHERE "projects"."id" = 2 /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Destroy (0.4ms)[0m  [1m[31mDELETE FROM "projects" WHERE "projects"."id" = 3 /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Destroy (0.4ms)[0m  [1m[31mDELETE FROM "projects" WHERE "projects"."id" = 4 /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Create (0.5ms)[0m  [1m[32mINSERT INTO "projects" ("title", "description", "completed", "created_at", "updated_at") VALUES ('Learn Ruby on Rails', 'Master the Rails framework and conventions', 0, '2025-09-05 16:59:59.380579', '2025-09-05 16:59:59.380579') RETURNING "id" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Create (0.5ms)[0m  [1m[32mINSERT INTO "projects" ("title", "description", "completed", "created_at", "updated_at") VALUES ('Build REST API', 'Create a JSON API with CRUD operations', 1, '2025-09-05 16:59:59.382147', '2025-09-05 16:59:59.382147') RETURNING "id" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Create (0.5ms)[0m  [1m[32mINSERT INTO "projects" ("title", "description", "completed", "created_at", "updated_at") VALUES ('Connect with React Frontend', 'Integrate Rails API with React application', 0, '2025-09-05 16:59:59.383473', '2025-09-05 16:59:59.383473') RETURNING "id" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Create (0.5ms)[0m  [1m[32mINSERT INTO "projects" ("title", "description", "completed", "created_at", "updated_at") VALUES ('Deploy to Production', 'Deploy the full-stack application to a cloud platform', 0, '2025-09-05 16:59:59.384770', '2025-09-05 16:59:59.384770') RETURNING "id" /*application='Backend'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Backend'*/[0m
+  [1m[36mProject Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "projects" /*application='Backend'*/[0m
+Started GET "/api/projects" for ::1 at 2025-09-05 13:00:08 -0400
+Processing by Api::ProjectsController#index as */*
+  [1m[36mProject Load (1.3ms)[0m  [1m[34mSELECT "projects".* FROM "projects" /*action='index',application='Backend',controller='projects'*/[0m
+  ↳ app/controllers/api/projects_controller.rb:7:in `index'
+Completed 200 OK in 6ms (Views: 3.7ms | ActiveRecord: 1.3ms (1 query, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/api/projects" for ::1 at 2025-09-05 13:00:08 -0400
+Processing by Api::ProjectsController#index as */*
+  [1m[36mProject Load (0.1ms)[0m  [1m[34mSELECT "projects".* FROM "projects" /*action='index',application='Backend',controller='projects'*/[0m
+  ↳ app/controllers/api/projects_controller.rb:7:in `index'
+Completed 200 OK in 2ms (Views: 1.4ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.3ms)
+
+
