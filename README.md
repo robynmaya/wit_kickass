@@ -1,10 +1,6 @@
 # 🚀 Full-Stack Practice Workspace
 
-**Master React with multiple backend techn### 🐘 **Shared PostgreSQL Setup**
-- **Single PostgreSQL server** in Docker container
-- **Separate databases** for complete isolation
-- **Automatic initialization** on first run
-- **Persistent data** survives container restartsn one comprehensive workspace!**
+**Master React with multiple backend technologies in one comprehensive workspace!**
 
 A complete development environment featuring **React frontends** paired with **Express (Node.js)**, **FastAPI (Python)**, and **Rails (Ruby)** backends. Each app demonstrates the same features using different technology stacks, making it perfect for learning and comparing approaches.
 
