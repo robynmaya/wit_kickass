@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
     resources :projects
-    get 'health', to: 'application#health'
+    get 'health', to: 'health#check'
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
