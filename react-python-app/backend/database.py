@@ -1,31 +1,47 @@
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.sql import func
+import psycopg2
+import psycopg2.extras
+from psycopg2.pool import SimpleConnectionPool
 import os
+from contextlib import contextmanager
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://wit_user:dev_password@localhost:5432/fastapi_tasks_db")
+# Database configuration
+DB_CONFIG = {
+    'host': os.getenv('DB_HOST', 'localhost'),
+    'port': os.getenv('DB_PORT', '5432'),
+    'database': os.getenv('DB_NAME', 'fastapi_tasks_db'),
+    'user': os.getenv('DB_USER', 'wit_user'),
+    'password': os.getenv('DB_PASSWORD', 'dev_password')
+}
 
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+# Connection pool
+connection_pool = SimpleConnectionPool(1, 10, **DB_CONFIG)
 
-class Task(Base):
-    __tablename__ = "tasks"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, nullable=True)
-    completed = Column(Boolean, default=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-
-def get_db():
-    db = SessionLocal()
+@contextmanager
+def get_db_connection():
+    """Context manager for database connections."""
+    conn = connection_pool.getconn()
     try:
-        yield db
+        yield conn
     finally:
-        db.close()
+        connection_pool.putconn(conn)
 
-def create_tables():
-    Base.metadata.create_all(bind=engine)
+def initialize_database():
+    """Create the tasks table if it doesn't exist."""
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS tasks (
+                        id SERIAL PRIMARY KEY,
+                        title VARCHAR NOT NULL,
+                        description TEXT,
+                        completed BOOLEAN DEFAULT FALSE,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                """)
+                conn.commit()
+        print("✅ Database initialized successfully")
+    except Exception as error:
+        print(f"❌ Database initialization failed: {error}")
+        raise

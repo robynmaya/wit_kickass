@@ -1,14 +1,14 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from datetime import datetime
 from typing import List, Optional
-from sqlalchemy.orm import Session
-from database import Task, get_db, create_tables
+from database import get_db_connection, initialize_database
+import psycopg2.extras
 import os
 
-# Create tables on startup
-create_tables()
+# Initialize database tables on startup
+initialize_database()
 
 app = FastAPI(title="FastAPI Task Manager", version="1.0.0")
 
@@ -39,9 +39,6 @@ class TaskResponse(BaseModel):
     created_at: str
     updated_at: Optional[str]
 
-    class Config:
-        from_attributes = True
-
 @app.get("/api/health")
 async def health_check():
     return {
@@ -52,48 +49,100 @@ async def health_check():
     }
 
 @app.get("/api/tasks", response_model=List[TaskResponse])
-async def get_tasks(db: Session = Depends(get_db)):
-    tasks = db.query(Task).order_by(Task.created_at.desc()).all()
-    return tasks
+async def get_tasks():
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                cursor.execute("SELECT * FROM tasks ORDER BY created_at DESC")
+                tasks = cursor.fetchall()
+                return [dict(task) for task in tasks]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 @app.post("/api/tasks", response_model=TaskResponse)
-async def create_task(task: TaskCreate, db: Session = Depends(get_db)):
-    db_task = Task(title=task.title, description=task.description)
-    db.add(db_task)
-    db.commit()
-    db.refresh(db_task)
-    return db_task
+async def create_task(task: TaskCreate):
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                cursor.execute(
+                    "INSERT INTO tasks (title, description) VALUES (%s, %s) RETURNING *",
+                    (task.title, task.description)
+                )
+                new_task = cursor.fetchone()
+                conn.commit()
+                return dict(new_task)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 @app.get("/api/tasks/{task_id}", response_model=TaskResponse)
-async def get_task(task_id: int, db: Session = Depends(get_db)):
-    task = db.query(Task).filter(Task.id == task_id).first()
-    if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
-    return task
+async def get_task(task_id: int):
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                cursor.execute("SELECT * FROM tasks WHERE id = %s", (task_id,))
+                task = cursor.fetchone()
+                if not task:
+                    raise HTTPException(status_code=404, detail="Task not found")
+                return dict(task)
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 @app.put("/api/tasks/{task_id}", response_model=TaskResponse)
-async def update_task(task_id: int, task_update: TaskUpdate, db: Session = Depends(get_db)):
-    task = db.query(Task).filter(Task.id == task_id).first()
-    if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
-    
-    update_data = task_update.dict(exclude_unset=True)
-    for field, value in update_data.items():
-        setattr(task, field, value)
-    
-    db.commit()
-    db.refresh(task)
-    return task
+async def update_task(task_id: int, task_update: TaskUpdate):
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                # Check if task exists
+                cursor.execute("SELECT * FROM tasks WHERE id = %s", (task_id,))
+                if not cursor.fetchone():
+                    raise HTTPException(status_code=404, detail="Task not found")
+                
+                # Build dynamic update query
+                update_fields = []
+                values = []
+                
+                if task_update.title is not None:
+                    update_fields.append("title = %s")
+                    values.append(task_update.title)
+                
+                if task_update.description is not None:
+                    update_fields.append("description = %s")
+                    values.append(task_update.description)
+                
+                if task_update.completed is not None:
+                    update_fields.append("completed = %s")
+                    values.append(task_update.completed)
+                
+                update_fields.append("updated_at = CURRENT_TIMESTAMP")
+                values.append(task_id)
+                
+                query = f"UPDATE tasks SET {', '.join(update_fields)} WHERE id = %s RETURNING *"
+                cursor.execute(query, values)
+                updated_task = cursor.fetchone()
+                conn.commit()
+                return dict(updated_task)
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 @app.delete("/api/tasks/{task_id}")
-async def delete_task(task_id: int, db: Session = Depends(get_db)):
-    task = db.query(Task).filter(Task.id == task_id).first()
-    if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
-    
-    db.delete(task)
-    db.commit()
-    return {"message": "Task deleted successfully"}
+async def delete_task(task_id: int):
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("DELETE FROM tasks WHERE id = %s RETURNING id", (task_id,))
+                deleted = cursor.fetchone()
+                if not deleted:
+                    raise HTTPException(status_code=404, detail="Task not found")
+                conn.commit()
+                return {"message": "Task deleted successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn
