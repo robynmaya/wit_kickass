@@ -25,7 +25,7 @@ wit_kickass/
 ### 📥 **Clone & Setup (New Users)**
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/robynmaya/wit_kickass.git
 cd wit_kickass
 ./setup.sh          # 🎯 One command sets up everything!
 ```
