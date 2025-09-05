@@ -10,8 +10,8 @@ A complete development environment featuring **React frontends** paired with **E
 
 ```
 wit_kickass/
-├── 🟨 react-express-app/     # React + Express + TypeScript + Prisma
-├── 🐍 react-python-app/      # React + FastAPI + Python + SQLAlchemy
+├── 🟨 react-express-app/     # React + Express + TypeScript + Raw SQL
+├── 🐍 react-python-app/      # React + FastAPI + Python + Raw SQL
 ├── 💎 react-rails-app/       # React + Rails + Ruby + Active Record
 ├── 🐘 docker-compose.yml     # Shared PostgreSQL database
 ├── 📋 setup.sh              # One-command setup script
@@ -70,11 +70,11 @@ npm run health      # Verify everything is working correctly
 
 ## 🗄️ Database Configuration
 
-| App | Database Type | ORM | Persistence |
-|-----|---------------|-----|-------------|
-| **Express** | PostgreSQL | Prisma | ✅ Persistent |
-| **Python** | PostgreSQL | SQLAlchemy | ✅ Persistent |
-| **Rails** | PostgreSQL | Active Record | ✅ Persistent |
+| App | Database Type | Query Method | Persistence |
+|-----|---------------|--------------|-------------|
+| **Express** | PostgreSQL | Raw SQL + pg | ✅ Persistent |
+| **Python** | PostgreSQL | Raw SQL + psycopg2 | ✅ Persistent |
+| **Rails** | PostgreSQL | Active Record ORM | ✅ Persistent |
 
 ### � **Shared PostgreSQL Setup:**
 
@@ -107,23 +107,23 @@ npm run db:reset    # Reset all databases (removes data!)
 
 #### 🟨 Express App
 - **Node.js 18+** + Express + TypeScript
-- **Prisma** ORM with PostgreSQL
+- **Raw SQL queries** with pg (node-postgres)
 - **Nodemon** for auto-restart
 - **CORS** enabled for local development
 - **RESTful** todo management API
 
 #### 🐍 FastAPI App
 - **Python 3.8+** + FastAPI with async/await
-- **SQLAlchemy** ORM with PostgreSQL
+- **Raw SQL queries** with psycopg2 or asyncpg
 - **Pydantic** models for automatic validation
 - **Uvicorn** ASGI server with hot reload
 - **Automatic API documentation** at `/docs`
 
 #### 💎 Rails App
 - **Ruby 3.0+** + Rails 8 API-only mode
-- **Active Record** ORM with PostgreSQL
+- **Active Record ORM** for database interactions
 - **Rack-CORS** for cross-origin requests
-- **Database migrations** and seed data
+- **Database migrations** for schema management
 - **Convention over configuration**
 
 ---
@@ -143,19 +143,36 @@ Each app demonstrates identical functionality using different approaches:
 ### 📚 **What You'll Learn**
 
 #### Frontend Skills
-- React state management with `useState` and `useEffect`
-- API integration with `fetch()` and error handling
-- Form validation and user interaction patterns
-- TypeScript integration with React components
-- Modern CSS layout and responsive design
+- React state management with `useState`, `useEffect`, and `useReducer`
+- Custom hooks creation and reusable logic patterns
+- Component composition and prop drilling solutions
+- Context API for global state management
+- Performance optimization with `useMemo`, `useCallback`, and `React.memo`
+- Code splitting and lazy loading with `React.lazy` and `Suspense`
+- Error boundaries and error handling strategies
+- Conditional rendering and list rendering patterns
+- Event handling and form management
+- API integration with `fetch()`, loading states, and error handling
+- Real-time data with polling, WebSockets, and Server-Sent Events
+- Debouncing and throttling for performance optimization
+- Virtual scrolling for large datasets
+- TypeScript integration with React components and props
+- Modern CSS techniques (Flexbox, Grid, CSS Modules)
+- Responsive design and mobile-first approaches
+- Component testing strategies and best practices
+- Advanced patterns: Render props, Higher-Order Components (HOCs)
+- State machines and complex state management
+- Micro-frontends and component libraries
 
 #### Backend Skills
-- **Express**: Middleware patterns, routing, JSON APIs
-- **FastAPI**: Async programming, automatic validation, API documentation
-- **Rails**: MVC architecture, Active Record patterns, convention over configuration
+- **Express**: Middleware patterns, routing, raw SQL queries with pg
+- **FastAPI**: Async programming, raw SQL with psycopg2/asyncpg, API documentation
+- **Rails**: MVC architecture, Active Record ORM, database migrations and associations
 
 #### Full-Stack Integration
-- Database design and ORM usage across different frameworks
+- Database design and SQL query optimization
+- SQL injection prevention and parameterized queries (Express/FastAPI)
+- ORM relationships and migrations (Rails Active Record)
 - API design patterns and RESTful conventions
 - Cross-origin resource sharing (CORS) configuration
 - Environment management and configuration
@@ -268,14 +285,76 @@ cd react-rails-app && ./start.sh      # Rails app only
 
 ## 🤝 Contributing
 
-This workspace is designed for learning and experimentation! Feel free to:
+This workspace is designed for learning and experimentation! We welcome contributions that help improve the learning experience for everyone.
 
-- ✅ **Add new features** to existing apps
-- ✅ **Create additional backend integrations**
-- ✅ **Improve styling and UX**
-- ✅ **Add testing frameworks**
-- ✅ **Experiment with different React patterns**
-- ✅ **Try new database schemas**
+### 🌿 **Contribution Workflow**
+
+1. **Fork the repository** to your GitHub account
+2. **Create a new branch** from `main` for your changes:
+   ```bash
+   git checkout -b feature/your-feature-name
+   # or
+   git checkout -b fix/issue-description
+   ```
+3. **Make your changes** and test them thoroughly
+4. **Commit using conventional format** (see below)
+5. **Push your branch** to your fork
+6. **Create a Pull Request** against the `main` branch
+
+### 📝 **Commit Message Format**
+
+Use conventional commit format: `type: description`
+
+#### **Commit Types:**
+- **`feat:`** ✨ **New features** - Adding new functionality, components, or capabilities
+  ```bash
+  feat: add user authentication to Express app
+  feat: implement real-time updates with WebSockets
+  ```
+
+- **`fix:`** 🐛 **Bug fixes** - Correcting errors, issues, or broken functionality
+  ```bash
+  fix: resolve CORS issue in FastAPI backend
+  fix: correct database connection timeout
+  ```
+
+- **`docs:`** 📚 **Documentation** - Updates to README, comments, or guides
+  ```bash
+  docs: update installation instructions
+  docs: add API endpoint examples
+  ```
+
+- **`chore:`** 🧹 **Maintenance** - Dependencies, configuration, or housekeeping tasks
+  ```bash
+  chore: update npm dependencies
+  chore: configure ESLint rules
+  ```
+
+### 💡 **Contribution Ideas**
+
+Feel free to contribute:
+
+- ✅ **Add new features** to existing apps (authentication, file upload, etc.)
+- ✅ **Add more API endpoints** - Expand functionality with new routes like:
+  - User authentication (login, register, JWT tokens)
+  - File upload/download endpoints
+  - Search and filtering capabilities
+  - User profiles and settings
+  - Comments or reviews system
+- ✅ **Improve styling and UX** with better CSS or UI libraries
+- ✅ **Add testing frameworks** (Jest, Pytest, RSpec)
+- ✅ **Experiment with different React patterns** (Context, Redux, Zustand)
+- ✅ **Try new database schemas** or add more complex relationships
+- ✅ **Enhance developer experience** with better tooling or scripts
+- ✅ **Add deployment guides** (Docker, Heroku, Vercel)
+
+### 🔍 **Code Review Guidelines**
+
+- Ensure all apps still work after your changes
+- Test with `npm run health` before submitting
+- Keep changes focused and atomic
+- Update documentation if needed
+- Follow existing code style and patterns
 
 ---
 
