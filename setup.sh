@@ -209,31 +209,41 @@ install_dependencies() {
     print_info "Installing dependencies for all apps..."
     
     # Express app
-    if [ -d "react-express-app/backend" ]; then
+    if [ -d "react-express-app/backend" ] && [ ! -d "react-express-app/backend/node_modules" ]; then
         print_info "Installing Express backend dependencies..."
         cd react-express-app/backend && npm install && cd ../..
+    elif [ -d "react-express-app/backend" ]; then
+        print_info "Express backend dependencies already installed, skipping..."
     fi
     
-    if [ -d "react-express-app/frontend" ]; then
+    if [ -d "react-express-app/frontend" ] && [ ! -d "react-express-app/frontend/node_modules" ]; then
         print_info "Installing Express frontend dependencies..."
         cd react-express-app/frontend && npm install && cd ../..
+    elif [ -d "react-express-app/frontend" ]; then
+        print_info "Express frontend dependencies already installed, skipping..."
     fi
     
     # FastAPI app
-    if [ -d "react-python-app/frontend" ]; then
+    if [ -d "react-python-app/frontend" ] && [ ! -d "react-python-app/frontend/node_modules" ]; then
         print_info "Installing FastAPI frontend dependencies..."
         cd react-python-app/frontend && npm install && cd ../..
+    elif [ -d "react-python-app/frontend" ]; then
+        print_info "FastAPI frontend dependencies already installed, skipping..."
     fi
     
     # Rails app
-    if [ -d "react-rails-app/frontend" ]; then
+    if [ -d "react-rails-app/frontend" ] && [ ! -d "react-rails-app/frontend/node_modules" ]; then
         print_info "Installing Rails frontend dependencies..."
         cd react-rails-app/frontend && npm install && cd ../..
+    elif [ -d "react-rails-app/frontend" ]; then
+        print_info "Rails frontend dependencies already installed, skipping..."
     fi
     
-    if [ -d "react-rails-app/backend" ] && command_exists bundle; then
+    if [ -d "react-rails-app/backend" ] && command_exists bundle && [ ! -d "react-rails-app/backend/vendor/bundle" ]; then
         print_info "Installing Rails backend dependencies..."
         cd react-rails-app/backend && bundle install && cd ../..
+    elif [ -d "react-rails-app/backend" ] && command_exists bundle; then
+        print_info "Rails backend dependencies already installed, skipping..."
     fi
     
     print_success "All dependencies installed"

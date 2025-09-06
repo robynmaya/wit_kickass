@@ -90,11 +90,13 @@ prisma/generated/
 **/.prisma/
 
 # Rails specific
-**/log/*.log
+**/log/
 **/tmp/
 **/storage/
 **/public/uploads/
 **/vendor/bundle/
+Gemfile.lock
+**/db/schema.rb
 
 # Python specific
 __pycache__/
