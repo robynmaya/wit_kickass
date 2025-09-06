@@ -132,6 +132,39 @@ check_ruby() {
     print_success "Ruby $(ruby --version | cut -d' ' -f2) is installed"
 }
 
+# Function to setup environment files
+setup_environment() {
+    print_info "Setting up environment configuration..."
+    
+    # Function to create .env file from .env.example if it doesn't exist
+    setup_env_file() {
+        local example_file="$1"
+        local env_file="${example_file%.example}"
+        
+        if [[ -f "$example_file" ]]; then
+            if [[ ! -f "$env_file" ]]; then
+                print_info "Creating $env_file from $example_file"
+                cp "$example_file" "$env_file"
+                print_success "Created $env_file"
+            else
+                print_info "$env_file already exists, skipping..."
+            fi
+        else
+            print_warning "$example_file not found"
+        fi
+    }
+    
+    # Set up environment files for all apps
+    setup_env_file "react-express-app/backend/.env.example"
+    setup_env_file "react-python-app/backend/.env.example"
+    
+    print_success "Environment configuration complete!"
+    echo "   • Express backend: Port 3001, PostgreSQL connection"
+    echo "   • Python backend: Port 5001, PostgreSQL connection"  
+    echo "   • Database credentials: wit_user/dev_password (matches Docker)"
+    echo
+}
+
 # Function to setup PostgreSQL
 setup_database() {
     print_info "Setting up PostgreSQL database..."
@@ -280,6 +313,7 @@ main() {
     check_python
     check_ruby
     
+    setup_environment
     setup_database
     setup_scripts
     install_dependencies
