@@ -6,7 +6,7 @@ import { Pool } from 'pg';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 
 // PostgreSQL connection pool
 const pool = new Pool({
@@ -35,8 +35,6 @@ async function initializeDatabase() {
     process.exit(1);
   }
 }
-
-
 
 // Initialize database on startup
 initializeDatabase();
