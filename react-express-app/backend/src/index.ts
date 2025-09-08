@@ -63,7 +63,7 @@ app.get('/api/todos', async (req, res) => {
 // Get todos with optional filtering
 app.get('/api/todos/filter', async (req, res) => {
   try {
-    const filter = req.query.filter as string | undefined;
+    const { filter } = req.query;
 
     let query = 'SELECT * FROM todos';
     const params: any[] = [];
@@ -80,7 +80,6 @@ app.get('/api/todos/filter', async (req, res) => {
 
     const result = await pool.query(query, params);
     res.json(result.rows);
-    console.log(result.rows);
   } catch (error) {
     console.error('Error fetching todos:', error);
     res.status(500).json({ error: 'Failed to fetch todos' });
