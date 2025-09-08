@@ -9,29 +9,39 @@ interface Todo {
   updated_at: string;
 }
 
+type FilterType = 'all' | 'completed' | 'incomplete';
+
 const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
+  const [currentFilter, setCurrentFilter] = useState<FilterType>('all');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const API_BASE = 'http://localhost:3001/api';
 
-  // Fetch todos from backend
-  const fetchTodos = async () => {
+  const fetchTodos = async (filter: FilterType = 'all') => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE}/todos`);
+      const url = filter === 'all'
+        ? `${API_BASE}/todos`
+        : `${API_BASE}/todos?filter=${filter}`
+      const response = await fetch(url);
       if (!response.ok) throw new Error('Failed to fetch todos');
       const data = await response.json();
       setTodos(data);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : 'An error occured');
     } finally {
       setLoading(false);
     }
-  };
+  }
+
+  const handleFilterChange = (filter: FilterType) => {
+    setCurrentFilter(filter);
+    fetchTodos(filter);
+  }
 
   // Create new todo
   const createTodo = async () => {
@@ -92,6 +102,26 @@ const TodoList: React.FC = () => {
       <h1>Express Todo App</h1>
       
       {error && <div className="error">Error: {error}</div>}
+      <div>
+        <button
+          className={currentFilter === 'all' ? 'active' : ''}
+          onClick={() => handleFilterChange('all')}
+        >
+          All
+        </button>
+        <button
+          className={currentFilter === 'completed' ? 'active' : ''}
+          onClick={() => handleFilterChange('completed')}
+        >
+          Completed
+        </button>
+        <button
+          className={currentFilter === 'incomplete' ? 'active' : ''}
+          onClick={() => handleFilterChange('incomplete')}
+        >
+          Incomplete
+        </button>
+      </div>
       
       <div className="todo-input">
         <input
