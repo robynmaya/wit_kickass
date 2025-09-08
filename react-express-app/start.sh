@@ -72,12 +72,11 @@ if [ ! -d "frontend/node_modules" ]; then
     cd frontend && npm install && cd ..
 fi
 
-# Run Prisma migrations
-print_info "🔄 Setting up database..."
-cd backend && npx prisma generate && npx prisma db push && cd ..
+# Database setup (raw SQL - no Prisma needed)
+print_info "🔄 Database ready (tables created automatically by Express app)..."
 
 # Start backend
-print_info "Starting Express backend (Port 5000)..."
+print_info "Starting Express backend (Port 3001)..."
 cd backend
 npm run dev &
 BACKEND_PID=$!
