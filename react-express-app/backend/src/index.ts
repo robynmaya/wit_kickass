@@ -6,7 +6,7 @@ import { Pool } from 'pg';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3001;
 
 // PostgreSQL connection pool
 const pool = new Pool({
@@ -80,6 +80,7 @@ app.get('/api/todos/filter', async (req, res) => {
 
     const result = await pool.query(query, params);
     res.json(result.rows);
+    console.log(result.rows);
   } catch (error) {
     console.error('Error fetching todos:', error);
     res.status(500).json({ error: 'Failed to fetch todos' });
