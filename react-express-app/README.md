@@ -35,7 +35,7 @@ A simple full-stack todo application built with React (TypeScript) and Express.j
    cd backend
    npm run dev
    ```
-   Server will run on `http://localhost:5000`
+   Server will run on `http://localhost:3001`
 
 2. **Start the Frontend (in a new terminal)**
    ```bash
