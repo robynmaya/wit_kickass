@@ -97,8 +97,8 @@ print_status "React frontend started (PID: $FRONTEND_PID)"
 echo
 print_status "🎉 Express app is running!"
 print_info "Frontend: http://localhost:5173"
-print_info "Backend:  http://localhost:5000"
-print_info "API:      http://localhost:5000/api/health"
+print_info "Backend:  http://localhost:3001"
+print_info "API:      http://localhost:3001/api/health"
 print_info "Database: PostgreSQL on localhost:5432"
 echo
 print_status "Press Ctrl+C to stop both servers"

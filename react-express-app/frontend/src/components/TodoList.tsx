@@ -15,7 +15,7 @@ const TodoList: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const API_BASE = 'http://localhost:5000/api';
+  const API_BASE = 'http://localhost:3001/api';
 
   // Fetch todos from backend
   const fetchTodos = async () => {
