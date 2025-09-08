@@ -32,7 +32,7 @@ const TodoList: React.FC = () => {
       setTodos(data);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occured');
+      setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
