@@ -150,7 +150,7 @@ app.delete('/api/todos/:id', async (req, res) => {
 
 app.get('/api/todos/search', async (req, res) => {
   try {
-    const search = req.query;
+    const { search } = req.query;
     if (!search) {
       return res.status(400).json({ error: 'Search query required' });
     }
