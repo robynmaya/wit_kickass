@@ -45,13 +45,19 @@ app.use(express.json());
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Express server is running!', timestamp: new Date().toISOString() });
+  res.json({
+    status: 'OK',
+    message: 'Express server is running!',
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // Get all todos
 app.get('/api/todos', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM todos ORDER BY created_at DESC');
+    const result = await pool.query(
+      'SELECT * FROM todos ORDER BY created_at DESC'
+    );
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching todos:', error);
@@ -71,7 +77,7 @@ app.post('/api/todos', async (req, res) => {
       'INSERT INTO todos (text) VALUES ($1) RETURNING *',
       [text.trim()]
     );
-    
+
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error('Error creating todo:', error);
@@ -105,7 +111,9 @@ app.put('/api/todos/:id', async (req, res) => {
     updateFields.push(`updated_at = CURRENT_TIMESTAMP`);
     values.push(id);
 
-    const query = `UPDATE todos SET ${updateFields.join(', ')} WHERE id = $${paramCount} RETURNING *`;
+    const query = `UPDATE todos SET ${updateFields.join(
+      ', '
+    )} WHERE id = $${paramCount} RETURNING *`;
     const result = await pool.query(query, values);
 
     if (result.rows.length === 0) {
@@ -123,9 +131,12 @@ app.put('/api/todos/:id', async (req, res) => {
 app.delete('/api/todos/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    
-    const result = await pool.query('DELETE FROM todos WHERE id = $1 RETURNING *', [id]);
-    
+
+    const result = await pool.query(
+      'DELETE FROM todos WHERE id = $1 RETURNING *',
+      [id]
+    );
+
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Todo not found' });
     }
@@ -134,6 +145,24 @@ app.delete('/api/todos/:id', async (req, res) => {
   } catch (error) {
     console.error('Error deleting todo:', error);
     res.status(500).json({ error: 'Failed to delete todo' });
+  }
+});
+
+app.get('/api/todos/search', async (req, res) => {
+  try {
+    const { search } = req.query;
+    if (!search) {
+      return res.status(400).json({ error: 'Search query required' });
+    }
+    const values = [`%${search}`];
+    const result = await pool.query(
+      "SELECT * FROM todos WHERE (title || ' ' || COALESCE(description, '')) ILIKE $1",
+      values
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error searching todos:', error);
+    res.status(500).json({ error: 'Failed to search todos' });
   }
 });
 
