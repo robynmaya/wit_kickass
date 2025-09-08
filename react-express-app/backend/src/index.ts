@@ -34,7 +34,7 @@ async function initializeDatabase() {
     console.error('❌ Database initialization failed:', error);
     process.exit(1);
   }
-}
+
 
 // Initialize database on startup
 initializeDatabase();
@@ -52,6 +52,22 @@ app.get('/api/health', (req, res) => {
 app.get('/api/todos', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM todos ORDER BY created_at DESC');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching todos:', error);
+    res.status(500).json({ error: 'Failed to fetch todos' });
+  }
+});
+
+app.get('/api/todos/filter', async (req, res) => {
+  try {
+    const completedValue = req.query.completed === 'true';
+
+    const result = await pool.query(
+      'SELECT * FROM todos WHERE completed = $1 ORDER BY created_at DESC',
+      [completedValue]
+    );
+
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching todos:', error);
