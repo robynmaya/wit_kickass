@@ -34,6 +34,8 @@ async function initializeDatabase() {
     console.error('❌ Database initialization failed:', error);
     process.exit(1);
   }
+}
+
 
 
 // Initialize database on startup
@@ -59,21 +61,33 @@ app.get('/api/todos', async (req, res) => {
   }
 });
 
+
+// Get todos with optional filtering
 app.get('/api/todos/filter', async (req, res) => {
   try {
-    const completedValue = req.query.completed === 'true';
+    const filter = req.query.filter as string | undefined;
 
-    const result = await pool.query(
-      'SELECT * FROM todos WHERE completed = $1 ORDER BY created_at DESC',
-      [completedValue]
-    );
+    let query = 'SELECT * FROM todos';
+    const params: any[] = [];
 
+    if (filter === 'completed') {
+      query += ' WHERE completed = $1';
+      params.push(true);
+    } else if (filter === 'incomplete') {
+      query += ' WHERE completed = $1';
+      params.push(false);
+    }
+
+    query += ' ORDER BY created_at DESC';
+
+    const result = await pool.query(query, params);
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching todos:', error);
     res.status(500).json({ error: 'Failed to fetch todos' });
   }
 });
+
 
 // Create a new todo
 app.post('/api/todos', async (req, res) => {
