@@ -119,7 +119,6 @@ const TodoList: React.FC = () => {
   return (
     <div className='todo-container'>
       <h1>Express Todo App</h1>
-      <h2>Search</h2>
       <Search value={search} handleSearch={handleSearch} />
 
       {error && <div className='error'>Error: {error}</div>}

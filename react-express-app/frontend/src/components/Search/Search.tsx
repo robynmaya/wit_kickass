@@ -8,9 +8,11 @@ const Search = ({
   return (
     <>
       <input
+        className='todos-search-input'
         type='text'
         value={value}
         onChange={(e) => handleSearch(e.target.value)}
+        placeholder='Search todos...'
       />
     </>
   );
