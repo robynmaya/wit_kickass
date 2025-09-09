@@ -48,20 +48,9 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Express server is running!', timestamp: new Date().toISOString() });
 });
 
-// Get all todos
-app.get('/api/todos', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM todos ORDER BY created_at DESC');
-    res.json(result.rows);
-  } catch (error) {
-    console.error('Error fetching todos:', error);
-    res.status(500).json({ error: 'Failed to fetch todos' });
-  }
-});
-
 
 // Get todos with optional filtering
-app.get('/api/todos/filter', async (req, res) => {
+app.get('/api/todos', async (req, res) => {
   try {
     const { filter } = req.query;
 

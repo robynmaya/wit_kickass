@@ -23,7 +23,7 @@ const TodoList: React.FC = () => {
   const fetchTodos = async (filter: FilterType = 'all') => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE}/todos/filter?filter=${filter}`);
+      const response = await fetch(`${API_BASE}/todos?filter=${filter}`);
       if (!response.ok) throw new Error('Failed to fetch todos');
       const data = await response.json();
       setTodos(data);
