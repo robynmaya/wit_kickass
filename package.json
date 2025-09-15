@@ -11,7 +11,9 @@
     "react-express": "npm run db:start && cd react-express-app && ./start.sh",
     "react-python": "npm run db:start && cd react-python-app && ./start.sh",
     "react-rails": "npm run db:start && cd react-rails-app && ./start.sh",
-    "dev:all": "./dev-start.sh"
+    "dev:all": "./dev-start.sh",
+    "dsa": "cd dsa && npm test",
+    "lint": "npm run lint --prefix react-express-app/frontend && npm run lint --prefix react-express-app/backend && npm run lint --prefix react-python-app/frontend && npm run lint --prefix react-rails-app/frontend && npm run lint --prefix dsa"
   },
   "keywords": [
     "react",
